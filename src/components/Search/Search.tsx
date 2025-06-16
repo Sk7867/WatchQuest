@@ -9,7 +9,6 @@ const Search = (props: searchProps) => {
   const { searchTerm, setSearchTerm } = props
 
   const handleSearchterm = (term: string) => {
-    console.debug('search ::', term)
     setSearchTerm(term)
   }
 

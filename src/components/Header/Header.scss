@@ -1,0 +1,15 @@
+header.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #030014cc; // Add a solid or semi-transparent background for better visibility
+    backdrop-filter: blur(10px);
+    margin: 0 !important; // Remove any margin that may push header down
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); // Optional: subtle shadow for separation
+}
