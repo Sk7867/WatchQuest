@@ -21,3 +21,8 @@ interface Movie {
   vote_average: number;
   vote_count: number;
 }
+
+interface genre {
+  id: number;
+  name: string;
+}

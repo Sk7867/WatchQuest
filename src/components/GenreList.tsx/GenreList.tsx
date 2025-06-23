@@ -1,0 +1,68 @@
+import React, { useEffect, useState } from 'react'
+import { environment } from '../../environment/environment'
+import Spinner from '../Spinner'
+
+const GenreList = () => {
+  const [genreList, setgGenreList] = useState<genre[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const fetchGenres = async () => {
+    const fetchGenreUrl = `${environment.tmdbBaseUrl}${environment.listGenre}`;
+    const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+    const API_OPTIONS = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${API_KEY}`,
+      },
+    };
+    const response = await fetch(fetchGenreUrl, API_OPTIONS);
+    if (!response.ok) {
+      handleGenreResponse([], false, 'Failed to fetch Genres');
+      return;
+    }
+    const data: { genres: genre[] } = await response.json();
+    if (data.genres.length) {
+      handleGenreResponse(data.genres, false);
+    } else {
+      handleGenreResponse([], false, 'No Genres Found');
+    }
+  };
+
+
+  useEffect(() => {
+    fetchGenres();
+    return () => {
+
+    }
+  }, [])
+
+
+  const handleGenreResponse = (arrayList: genre[], loadingState: boolean, errorMessage: string = '') => {
+    setgGenreList(arrayList);
+    setIsLoading(loadingState);
+    setErrorMessage(errorMessage);
+  }
+
+  return (
+    <section className='genre-list-section my-20'>
+      {isLoading ? (<Spinner />) :
+        errorMessage ? (<p className="text-red-500">{errorMessage}</p>) :
+          (
+            <>
+              <h2 className="text-white text-2xl mb-4">Genres</h2>
+              <ul className="genre-list flex flex-row gap-4 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+                {genreList.map((genre) => (
+                  <li key={genre.id} className="genre-item border-1 text-white border-white cursor-pointer p-3 rounded-sm hover:bg-white hover:text-black transition-colors">
+                    <p className="genre-name text-nowrap">{genre.name}</p>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+    </section>
+  )
+}
+
+export default GenreList

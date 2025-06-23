@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
+import { environment } from '../environment/environment';
 
-const API_BASE_URL = "https://api.themoviedb.org/3";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const API_OPTIONS = {
     method: "GET",
@@ -22,8 +22,8 @@ const useSearchMovies = () => {
         setMoviesList([]);
         try {
             const fetchMovieUrl = query
-                ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
-                : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
+                ? `${environment.tmdbBaseUrl}${environment.search}${encodeURIComponent(query)}`
+                : `${environment.tmdbBaseUrl}${environment.discover}`;
             const response = await fetch(fetchMovieUrl, API_OPTIONS);
             if (!response.ok) {
                 setErrorMessage('Failed to fetch Movies');
