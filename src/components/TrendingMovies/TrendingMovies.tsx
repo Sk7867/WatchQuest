@@ -59,6 +59,7 @@ const TrendingMovies = () => {
 			{isTrendingLoading ? (
 				//Display skeleton component of 5 trending movies while loading
 				<ul className='mt-20'>
+					<div>Test</div>
 					{Array.from({ length: 5 }).map((_, index) => (
 						<li key={index}>
 							<div className="w-6 h-6 bg-gray-700 rounded mb-2 animate-pulse"></div>
