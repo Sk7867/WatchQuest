@@ -6,7 +6,7 @@ const MovieCard = (props: IMovieProps) => {
     const { id, title, poster_path, vote_average, original_language, release_date } = props.movie
     return (
         <div className='movie-card' key={id}>
-            <img src={poster_path ? `https://image.tmdb.org/t/p/w500/${poster_path}` : '/no-movie.png'} alt={title} />
+            <img src={poster_path ? `https://image.tmdb.org/t/p/w500/${poster_path}` : '/no-movie.png'} alt={title} loading="lazy" />
             <div className="mt-4">
                 <h3>{title}</h3>
             </div>

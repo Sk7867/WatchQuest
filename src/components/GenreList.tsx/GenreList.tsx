@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { environment } from '../../environment/environment'
-import Spinner from '../Spinner'
 
 const GenreList = () => {
   const [genreList, setgGenreList] = useState<genre[]>([])
@@ -47,11 +46,19 @@ const GenreList = () => {
 
   return (
     <section className='genre-list-section my-20'>
-      {isLoading ? (<Spinner />) :
+      <h2 className="text-white text-2xl mb-4">Genres</h2>
+      {isLoading ? (
+        <ul className='genre-list flex flex-row gap-4 overflow-y-auto' style={{ scrollbarWidth: 'none' }}>
+          {Array.from({ length: 12 }).map((_, index) => (
+            <li key={index} className='w-24 h-12 border-1 p-3 border-white rounded-sm'>
+              <div className='w-full h-full bg-gray-700 animate-pulse'></div>
+            </li>
+          ))}
+        </ul>
+      ) :
         errorMessage ? (<p className="text-red-500">{errorMessage}</p>) :
           (
             <>
-              <h2 className="text-white text-2xl mb-4">Genres</h2>
               <ul className="genre-list flex flex-row gap-4 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
                 {genreList.map((genre) => (
                   <li key={genre.id} className="genre-item border-1 text-white border-white cursor-pointer p-3 rounded-sm hover:bg-white hover:text-black transition-colors">

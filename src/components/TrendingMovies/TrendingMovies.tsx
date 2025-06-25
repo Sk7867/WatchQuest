@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { environment } from '../../environment/environment';
-import Spinner from '../Spinner';
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
@@ -55,15 +54,30 @@ const TrendingMovies = () => {
 	}
 
 	return (
-		<section className="trending">
+		<section className="trending h-[300px]">
 			<h2>Trending Movies</h2>
-			{isTrendingLoading ? (<Spinner />) :
+			{isTrendingLoading ? (
+				//Display skeleton component of 5 trending movies while loading
+				<ul className='mt-20'>
+					{Array.from({ length: 5 }).map((_, index) => (
+						<li key={index}>
+							<div className="w-6 h-6 bg-gray-700 rounded mb-2 animate-pulse"></div>
+							<div className="w-[127px] h-[163px] bg-gray-700 rounded-lg animate-pulse"></div>
+						</li>
+					))}
+				</ul>
+			) :
 				trendingErrorMessage ? (<p className='text-red-500'>{trendingErrorMessage}</p>) : (
 					<ul>
 						{trendingMoviesList.map((movie, index) => (
 							<li key={movie.id}>
 								<p>{index + 1}</p>
-								<img src={movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : '/no-movie.png'} alt={movie.title} />
+								<img
+									src={movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : '/no-movie.png'}
+									alt={movie.title}
+									loading="eager"
+									fetchPriority="high"
+								/>
 							</li>
 						))}
 					</ul>

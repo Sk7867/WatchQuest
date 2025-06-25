@@ -1,8 +1,8 @@
 import React from 'react'
 import TrendingMovies from '../components/TrendingMovies/TrendingMovies'
 import GenreList from '../components/GenreList.tsx/GenreList'
-import Spinner from '../components/Spinner'
 import MovieCard from '../components/MovieCard'
+import MovieCardSkeleton from '../components/MovieCardSkeleton'
 
 interface HomepageProps {
 	isLoading: boolean;
@@ -20,7 +20,11 @@ const Homepage: React.FC<HomepageProps> = ({ isLoading, errorMessage, moviesList
 					<section className="all-movies">
 						<h2>All Movies</h2>
 						{isLoading ? (
-							<Spinner />
+							<ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+								{Array.from({ length: 8 }).map((_, index) => (
+									<MovieCardSkeleton key={index} />
+								))}
+							</ul>
 						) : errorMessage ? (
 							<p className="text-red-500">{errorMessage}</p>
 						) : (
