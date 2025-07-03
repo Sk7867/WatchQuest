@@ -6,17 +6,22 @@ import MovieCardSkeleton from '../components/MovieCardSkeleton'
 
 interface HomepageProps {
 	isLoading: boolean;
+	searchTerm: string;
 	errorMessage: string;
 	moviesList: Movie[];
 }
 
-const Homepage: React.FC<HomepageProps> = ({ isLoading, errorMessage, moviesList }) => {
+const Homepage: React.FC<HomepageProps> = ({ isLoading, errorMessage, moviesList, searchTerm }) => {
 	return (
 		<main>
 			<div className="pattern">
 				<div className="wrapper">
-					<TrendingMovies />
-					<GenreList />
+					{!searchTerm && (
+						<>
+							<TrendingMovies />
+							<GenreList />
+						</>
+					)}
 					<section className="all-movies">
 						<h2>All Movies</h2>
 						{isLoading ? (

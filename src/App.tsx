@@ -17,7 +17,7 @@ const App = () => {
   return (
     <>
       <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <Homepage errorMessage={errorMessage} isLoading={isLoading} moviesList={moviesList} />
+      <Homepage searchTerm={searchTerm} errorMessage={errorMessage} isLoading={isLoading} moviesList={moviesList} />
     </>
   );
 };
