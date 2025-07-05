@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useDebounce } from 'react-use';
 
 interface searchProps {
-  searchTerm: string,
-  setSearchTerm: React.Dispatch<React.SetStateAction<string>>
+  handleMovieSearch: (name: string) => void
 }
 
-const Search = (props: searchProps) => {
-  const { searchTerm, setSearchTerm } = props
+const Search: React.FC<searchProps> = ({ handleMovieSearch }) => {
+  const [searchTerm, setSearchTerm] = useState('')
+
+  // Debounce search term and update hook
+  useDebounce(() => handleMovieSearch(searchTerm), 500, [searchTerm]);
 
   const handleSearchterm = (term: string) => {
     setSearchTerm(term)

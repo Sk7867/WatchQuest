@@ -3,15 +3,14 @@ import './Header.scss'
 import Search from '../Search/Search'
 
 interface HeaderProps {
-    searchTerm: string;
-    setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+    handleMovieSearch: (name: string) => void
 }
 
-const Header: React.FC<HeaderProps> = ({ searchTerm, setSearchTerm }) => {
+const Header: React.FC<HeaderProps> = ({ handleMovieSearch }) => {
     return (
         <header className="header" id='header'>
             <h1>WatchQuest</h1>
-            <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+            <Search handleMovieSearch={handleMovieSearch} />
         </header>
     )
 }

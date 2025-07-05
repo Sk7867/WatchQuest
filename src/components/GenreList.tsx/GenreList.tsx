@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { environment } from '../../environment/environment'
 
-const GenreList = () => {
+interface GenreListProps {
+  handleGenreSelected: (genreId: number) => void
+}
+
+const GenreList: React.FC<GenreListProps> = ({ handleGenreSelected }) => {
+  const [selectedGenre, setSelectedGenre] = useState<null | number>(null)
   const [genreList, setgGenreList] = useState<genre[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
+
+  useEffect(() => {
+    fetchGenres();
+    return () => { }
+  }, [])
 
   const fetchGenres = async () => {
     const fetchGenreUrl = `${environment.tmdbBaseUrl}${environment.listGenre}`;
@@ -29,19 +39,15 @@ const GenreList = () => {
     }
   };
 
-
-  useEffect(() => {
-    fetchGenres();
-    return () => {
-
-    }
-  }, [])
-
-
   const handleGenreResponse = (arrayList: genre[], loadingState: boolean, errorMessage: string = '') => {
     setgGenreList(arrayList);
     setIsLoading(loadingState);
     setErrorMessage(errorMessage);
+  }
+
+  const handleGenreClick = (genreId: number) => {
+    setSelectedGenre(genreId)
+    handleGenreSelected(genreId)
   }
 
   return (
@@ -61,7 +67,7 @@ const GenreList = () => {
             <>
               <ul className="genre-list flex flex-row gap-4 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
                 {genreList.map((genre) => (
-                  <li key={genre.id} className="genre-item border-1 text-white border-white cursor-pointer p-3 rounded-sm hover:bg-white hover:text-black transition-colors">
+                  <li key={genre.id} onClick={() => handleGenreClick(genre.id)} className={`genre-item border-1  border-white cursor-pointer p-3 rounded-sm hover:bg-white hover:text-black transition-colors ${selectedGenre === genre.id ? 'bg-white text-black' : 'text-white'}`}>
                     <p className="genre-name text-nowrap">{genre.name}</p>
                   </li>
                 ))}

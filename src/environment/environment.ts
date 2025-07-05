@@ -7,4 +7,5 @@ export const environment = {
   search: "/search/movie?query=",
   trending: "/trending/movie/",
   listGenre: "/genre/movie/list?language=en",
+  genreSearch: "/discover/movie?sort_by=popularity.desc&with_genres=",
 };

@@ -29,6 +29,9 @@ const TrendingMovies = () => {
 
 
 	const fetchTrendingMovies = async (time_period: string = 'day') => {
+		setIsTrendingLoading(true);
+		setTrendingErrorMessage('')
+		setTrendingMoviesList([])
 		try {
 			const trendingMoviesUrl = `${environment.tmdbBaseUrl}${environment.trending}${time_period}?language=en-US`;
 			const response = await fetch(trendingMoviesUrl, API_OPTIONS);
