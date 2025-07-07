@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { environment } from '../../environment/environment'
 
 interface GenreListProps {
+  selectedGenre: number | null
   handleGenreSelected: (genreId: number) => void
 }
 
-const GenreList: React.FC<GenreListProps> = ({ handleGenreSelected }) => {
-  const [selectedGenre, setSelectedGenre] = useState<null | number>(null)
+const GenreList: React.FC<GenreListProps> = ({ selectedGenre, handleGenreSelected }) => {
   const [genreList, setgGenreList] = useState<genre[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
@@ -46,7 +46,6 @@ const GenreList: React.FC<GenreListProps> = ({ handleGenreSelected }) => {
   }
 
   const handleGenreClick = (genreId: number) => {
-    setSelectedGenre(genreId)
     handleGenreSelected(genreId)
   }
 

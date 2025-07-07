@@ -41,6 +41,11 @@ const useSearchMovies = (searchMovie: string, genreId: null | number) => {
 			const data: MovieResponse = await response.json();
 			if (data.results.length) {
 				handleMoviesResponse(data.results, false)
+				if (query) {
+					if (query) {
+						scrollToAllMoviesSection();
+					}
+				}
 			} else {
 				handleMoviesResponse([], false, 'Movie Not Found, Please check the name')
 			}
@@ -64,6 +69,9 @@ const useSearchMovies = (searchMovie: string, genreId: null | number) => {
 			const data: MovieResponse = await response.json();
 			if (data.results.length) {
 				handleMoviesResponse(data.results, false)
+				if (query) {
+					scrollToAllMoviesSection();
+				}
 			} else {
 				handleMoviesResponse([], false, 'Movie Not Found, Please check the name')
 			}
@@ -87,6 +95,21 @@ const useSearchMovies = (searchMovie: string, genreId: null | number) => {
 		setMoviesList(arrayList);
 		setIsLoading(loadingState);
 		setErrorMessage(errorMessage)
+	}
+
+	const scrollToAllMoviesSection = () => {
+		setTimeout(() => {
+			const allMoviesSection = document.getElementById('allMovies');
+			if (allMoviesSection) {
+				const headerHeight = 116;
+				const sectionTop = allMoviesSection.getBoundingClientRect().top + window.scrollY;
+				const genreSection = 200;
+				window.scroll({
+					behavior: 'smooth',
+					top: sectionTop - headerHeight - genreSection
+				});
+			}
+		}, 500);
 	}
 
 	return { moviesList, isLoading, errorMessage };

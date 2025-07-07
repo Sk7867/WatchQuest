@@ -17,12 +17,13 @@ const App = () => {
 
   const handleMovieSearch = (name: string) => {
     setSearchMovie(name)
+    setSelectedGenre(null);
   }
 
   return (
     <>
       <Header handleMovieSearch={handleMovieSearch} />
-      <Homepage errorMessage={errorMessage} isLoading={isLoading} moviesList={moviesList} handleGenreSelected={handleGenreSelected} />
+      <Homepage errorMessage={errorMessage} isLoading={isLoading} moviesList={moviesList} selectedGenre={selectedGenre} handleGenreSelected={handleGenreSelected} />
     </>
   );
 };
