@@ -103,7 +103,7 @@ const useSearchMovies = (searchMovie: string, genreId: null | number) => {
 			if (allMoviesSection) {
 				const headerHeight = 116;
 				const sectionTop = allMoviesSection.getBoundingClientRect().top + window.scrollY;
-				const genreSection = 200;
+				const genreSection = 180;
 				window.scroll({
 					behavior: 'smooth',
 					top: sectionTop - headerHeight - genreSection

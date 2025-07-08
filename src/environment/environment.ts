@@ -8,4 +8,5 @@ export const environment = {
   trending: "/trending/movie/",
   listGenre: "/genre/movie/list?language=en",
   genreSearch: "/discover/movie?sort_by=popularity.desc&with_genres=",
+  movieDetails: "/movie/",
 };
