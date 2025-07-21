@@ -4,6 +4,7 @@ import useSearchMovies from "./Hooks/useSearchMovies";
 import Homepage from "./Pages/Homepage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollToTop from "./utils/ScrollToTop";
+import FooterNote from "./components/FooterNote/FooterNote";
 
 
 
@@ -45,6 +46,7 @@ const App = () => {
           </div>
         </main>
       </BrowserRouter>
+      <FooterNote />
     </>
   );
 };
