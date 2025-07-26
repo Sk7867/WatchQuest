@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { environment } from '../environment/environment';
 import Spinner from '../components/Spinner';
+import MoviePosterImage from '../components/MoviePosterImage/MoviePosterImage';
+import MovieDetailsComponent from '../components/MovieDetailsComponent/MovieDetailsComponent';
+import { fetchMovieDetailsService } from '../Service/movieService';
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const API_OPTIONS = {
@@ -17,12 +20,14 @@ const MovieDetailsPage = () => {
   const [movieDetails, setMovieDetails] = useState<IMovieDetailsResponse | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
+  const [movieCredits, setMovieCredits] = useState<IMovieCredits>({})
 
   useEffect(() => {
     // Fetch movie details using the name parameter
     if (id) {
       handleMovieDetailsResponse(null, true, '')
       fetchMovieDetails(id);
+      fetchMovieCredits(id);
     }
     // Cleanup if necessary
     return () => {
@@ -34,23 +39,48 @@ const MovieDetailsPage = () => {
 
   const fetchMovieDetails = async (movieId: string) => {
     try {
-      const getMovieUrl = environment.tmdbBaseUrl + environment.movieDetails + movieId;
-      const movieResponse = await fetch(getMovieUrl, API_OPTIONS)
-      if (!movieResponse.ok) {
-        console.error('Failed to fetch movie details');
-        return;
-      }
-      const movieDetailsObj: IMovieDetailsResponse = await movieResponse.json();
-      //Check if movieDetailsObj is not empty
-      if (!movieDetailsObj || Object.keys(movieDetailsObj).length === 0) {
-        handleMovieDetailsResponse(null, false, 'Movie details not found.');
-        return;
-      }
+      const movieDetailsObj = await fetchMovieDetailsService(movieId);
       console.log('Movie Details:', movieDetailsObj);
       handleMovieDetailsResponse(movieDetailsObj, false, '')
     } catch (error) {
       console.error('Fetch Movie Details Error ::', error)
       handleMovieDetailsResponse(null, false, 'Movie details not found.');
+    }
+  }
+
+  //Write a helper function to filter object with job "Director" and return an array of names using IMovieCreditsResponse as refecnce
+  const filterDirectors = (crew: Crew[]) => {
+    return crew.filter(member => member.job === 'Director').map(director => director.name);
+  }
+
+  //write a helper function to filter object with job "Writer" and return an array of names using IMovieCreditsResponse as reference
+  const filterWriters = (crew: Crew[]) => {
+    return crew.filter(member => member.job === 'Writer').map(writer => writer.name);
+  }
+
+  //writer a helper function which returns an array of names from cast using IMovieCreditsResponse as reference
+  const filterCast = (cast: Cast[]) => {
+    return cast.map(member => member.name);
+  }
+
+  const fetchMovieCredits = async (movieId: string) => {
+    try {
+      const getCreditsUrl = environment.tmdbBaseUrl + environment.movieDetails + movieId + "/credits";
+      const creditsResponse = await fetch(getCreditsUrl, API_OPTIONS);
+      if (!creditsResponse.ok) {
+        console.error('Failed to fetch movie credits');
+        return;
+      }
+      const creditsData: IMovieCreditsResponse = await creditsResponse.json();
+      const directors = filterDirectors(creditsData.crew);
+      const writers = filterWriters(creditsData.crew);
+      const cast = filterCast(creditsData.cast);
+
+      setMovieCredits({ directors, writers, cast });
+      // Process credits data if needed
+      console.log('Movie directros:', directors);
+    } catch (error) {
+      console.error('Fetch Movie Credits Error ::', error);
     }
   }
 
@@ -76,47 +106,12 @@ const MovieDetailsPage = () => {
           <p className='text-red-500 text-2xl'>{errorMessage}</p>
         </div>
       ) : movieDetails && (
-        <>
+        <div className="max-w-4xl md:gap-6 text-white shadow-lg flex flex-col md:flex-row">
           {/* Poster */}
-          <div className="flex-shrink-0 w-full md:w-[220px]">
-            <img
-              src={movieDetails.poster_path ? `https://image.tmdb.org/t/p/w500/${movieDetails.poster_path}` : '/no-movie.png'}
-              alt={movieDetails.title}
-              className="rounded-lg w-full h-auto object-cover shadow-md"
-            />
-          </div>
+          <MoviePosterImage altText={movieDetails.title} posterPath={movieDetails.poster_path} />
           {/* Details */}
-          <div className="flex-1 flex flex-col gap-2">
-            <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-              <h1 className="text-3xl font-bold leading-tight">{movieDetails.title}</h1>
-              <span className="text-gray-400 text-base font-medium">{movieDetails.certification || 'TV-14'}</span>
-              <span className="text-gray-400 text-base font-medium">{getRuntime(movieDetails.runtime)}</span>
-              <span className="text-gray-400 text-base font-medium">{getGenres(movieDetails.genres)}</span>
-              <span className="text-gray-400 text-base font-medium">{movieDetails.media_type === 'tv' ? 'TV Series' : 'Movie'}{getYear(movieDetails.release_date)}</span>
-            </div>
-            {/* Rating */}
-            <div className="flex items-center gap-2 mt-2">
-              <span className="text-pink-400 text-2xl">{'★'.repeat(Math.round((movieDetails.vote_average || 0) / 2))}</span>
-              <span className="text-pink-400 text-lg font-bold">{movieDetails.vote_average?.toFixed(1) || '-'}</span>
-              <span className="text-gray-400 text-base">/ 10</span>
-            </div>
-            {/* Overview */}
-            <p className="mt-4 text-gray-200 text-base max-w-2xl">
-              {movieDetails.overview}
-            </p>
-            {/* Creators */}
-            <div className="mt-4">
-              <span className="text-gray-400 font-semibold">CREATORS</span><br />
-              <span className="text-pink-400 font-medium">{getCreators(movieDetails.creators)}</span>
-            </div>
-            {/* Stars */}
-            <div className="mt-2">
-              <span className="text-gray-400 font-semibold">STARS</span><br />
-              <span className="text-pink-400 font-medium">{getStars(movieDetails.stars)}</span>
-              <span className="text-blue-400 font-semibold ml-2 cursor-pointer">SEE ALL &gt;</span>
-            </div>
-          </div>
-        </>
+          <MovieDetailsComponent movieTitle={movieDetails.title} movieDescription={movieDetails.overview} movieCredits={movieCredits} />
+        </div>
       )}
     </div>
   )

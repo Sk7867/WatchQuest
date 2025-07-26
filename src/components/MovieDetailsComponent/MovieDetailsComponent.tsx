@@ -1,0 +1,75 @@
+import React, { useState } from 'react'
+
+interface IMovieDetailsComponentProps {
+  movieTitle: string;
+  movieDescription: string;
+  movieCredits?: IMovieCredits; // Optional prop for movie credits
+  // movieCreators: string[];
+  // movieCast: string[];
+}
+
+const MovieDetailsComponent: React.FC<IMovieDetailsComponentProps> = ({ movieTitle, movieDescription, movieCredits }) => {
+  const [showAll, setShowAll] = useState(false);
+  const castToShow = showAll ? movieCredits?.cast : movieCredits?.cast?.slice(0, 6);
+  const handleShowAll = () => {
+    setShowAll(!showAll);
+  }
+  return (
+    <div className=" flex flex-col justify-between w-full md:w-2/3 space-y-4">
+      <h2 className="text-2xl font-bold">{movieTitle}</h2>
+
+      {/* <ShowMeta /> */}
+
+      <p className="text-sm text-gray-300">
+        {movieDescription}
+      </p>
+
+      <div>
+        {
+          movieCredits?.directors && movieCredits.directors.length > 0 && (
+            <p className="text-sm text-gray-400">
+              <span className="font-semibold text-white">Director:</span>{" "}
+              <span className="text-pink-400">{movieCredits.directors.join(', ')}</span>
+            </p>
+          )
+        }
+        {
+          movieCredits?.writers && movieCredits.writers.length > 0 && (
+            <p className="text-sm text-gray-400 mt-1">
+              <span className="font-semibold text-white">Writers:</span>{" "}
+              <span className="text-pink-400">{movieCredits.writers.join(', ')}</span>
+            </p>
+          )
+        }
+        {
+          movieCredits?.cast && movieCredits.cast.length > 0 && (
+            <div className="text-sm text-gray-400 mt-1">
+              <span className="font-semibold text-white">Cast:</span>{" "}
+              <span className="text-pink-400">
+                {
+                  <>
+                    {castToShow?.join(', ')}
+                    {movieCredits.cast.length > 6 && (
+                      <>
+                        {" "}
+                        <button
+                          className="text-blue-400 underline ml-1"
+                          onClick={() => handleShowAll()}
+                          type="button"
+                        >
+                          {showAll ? 'Show Less' : 'Show More'}
+                        </button>
+                      </>
+                    )}
+                  </>
+                }
+              </span>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  )
+}
+
+export default MovieDetailsComponent
