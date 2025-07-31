@@ -5,6 +5,7 @@ import Spinner from '../components/Spinner';
 import MoviePosterImage from '../components/MoviePosterImage/MoviePosterImage';
 import MovieDetailsComponent from '../components/MovieDetailsComponent/MovieDetailsComponent';
 import { fetchMovieDetailsService } from '../Service/movieService';
+import { filterCast, filterDirectors, filterWriters, formatReleaseDate, formatRuntime, formatVoteAverage, getGenres } from '../utils/movieHelper';
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const API_OPTIONS = {
@@ -40,27 +41,16 @@ const MovieDetailsPage = () => {
   const fetchMovieDetails = async (movieId: string) => {
     try {
       const movieDetailsObj = await fetchMovieDetailsService(movieId);
+      movieDetailsObj.genreList = getGenres(movieDetailsObj.genres);
+      movieDetailsObj.formattedRuntime = formatRuntime(movieDetailsObj.runtime);
+      movieDetailsObj.formattedReleaseYear = formatReleaseDate(movieDetailsObj.release_date);
+      movieDetailsObj.formatVoteAverage = formatVoteAverage(movieDetailsObj.vote_average);
       console.log('Movie Details:', movieDetailsObj);
       handleMovieDetailsResponse(movieDetailsObj, false, '')
     } catch (error) {
       console.error('Fetch Movie Details Error ::', error)
       handleMovieDetailsResponse(null, false, 'Movie details not found.');
     }
-  }
-
-  //Write a helper function to filter object with job "Director" and return an array of names using IMovieCreditsResponse as refecnce
-  const filterDirectors = (crew: Crew[]) => {
-    return crew.filter(member => member.job === 'Director').map(director => director.name);
-  }
-
-  //write a helper function to filter object with job "Writer" and return an array of names using IMovieCreditsResponse as reference
-  const filterWriters = (crew: Crew[]) => {
-    return crew.filter(member => member.job === 'Writer').map(writer => writer.name);
-  }
-
-  //writer a helper function which returns an array of names from cast using IMovieCreditsResponse as reference
-  const filterCast = (cast: Cast[]) => {
-    return cast.map(member => member.name);
   }
 
   const fetchMovieCredits = async (movieId: string) => {
@@ -91,11 +81,11 @@ const MovieDetailsPage = () => {
   }
 
   // Helper functions for formatting
-  const getGenres = (genres?: { name: string }[]) => genres?.map(g => g.name).join(', ') || '-';
-  const getCreators = (creators?: { name: string }[]) => creators?.map(c => c.name).join(', ') || '-';
-  const getStars = (stars?: { name: string }[]) => stars?.map(s => s.name).join(', ') || '-';
-  const getYear = (date?: string) => date ? new Date(date).getFullYear() : '';
-  const getRuntime = (runtime?: number) => runtime ? `${Math.floor(runtime / 60)}h ${runtime % 60}min` : '';
+  // const getGenres = (genres?: { name: string }[]) => genres?.map(g => g.name).join(', ') || '-';
+  // const getCreators = (creators?: { name: string }[]) => creators?.map(c => c.name).join(', ') || '-';
+  // const getStars = (stars?: { name: string }[]) => stars?.map(s => s.name).join(', ') || '-';
+  // const getYear = (date?: string) => date ? new Date(date).getFullYear() : '';
+  // const getRuntime = (runtime?: number) => runtime ? `${Math.floor(runtime / 60)}h ${runtime % 60}min` : '';
 
   return (
     <div className="flex flex-col md:flex-row mt-8 gap-8 text-white">
@@ -106,11 +96,11 @@ const MovieDetailsPage = () => {
           <p className='text-red-500 text-2xl'>{errorMessage}</p>
         </div>
       ) : movieDetails && (
-        <div className="max-w-4xl md:gap-6 text-white shadow-lg flex flex-col md:flex-row">
+        <div className="md:gap-6 text-white shadow-lg flex flex-col md:flex-row">
           {/* Poster */}
           <MoviePosterImage altText={movieDetails.title} posterPath={movieDetails.poster_path} />
           {/* Details */}
-          <MovieDetailsComponent movieTitle={movieDetails.title} movieDescription={movieDetails.overview} movieCredits={movieCredits} />
+          <MovieDetailsComponent movieDetails={movieDetails} movieCredits={movieCredits} />
         </div>
       )}
     </div>
