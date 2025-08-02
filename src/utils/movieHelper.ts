@@ -19,7 +19,7 @@ export const filterCast = (cast: Cast[]) => {
 
 //writer a hepler function that returns an array of genres from IMovieDetailsResponse
 export const getGenres = (genres: Genre[]) => {
-  return genres.map((genre) => genre.name).join(", ") || "-";
+  return genres.map((genre) => genre.name);
 };
 
 //write a helper function to covert runtime in minutes to hours and minutes format
@@ -41,6 +41,11 @@ export const formatReleaseDate = (releaseDate: string) => {
 //write a helper function which take vote_average and returns rounded value
 export const formatVoteAverage = (voteAverage: number) => {
   if (typeof voteAverage === "number" && !isNaN(voteAverage)) {
-    return Math.round(voteAverage);
+    return parseFloat(voteAverage.toFixed(1));
   }
+};
+
+export const formatLanguages = (languages: Spokenlanguage[]) => {
+  if (!languages || languages.length === 0) return "N/A";
+  return languages.map((lang) => lang.english_name).join(", ");
 };

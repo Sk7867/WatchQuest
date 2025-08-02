@@ -54,10 +54,11 @@ interface IMovieDetailsResponse {
   video: boolean;
   vote_average: number;
   vote_count: number;
-  genreList?: string; // Optional field for genre list
+  genreList?: string[]; // Optional field for genre list
   formattedRuntime?: string; // Optional field for formatted runtime
   formattedReleaseYear?: string; // Optional field for formatted release date
   formatVoteAverage?: number; // Optional field for formatted vote average
+  formatLanguages?: string; // Optional field for formatted languages
 }
 
 interface Spokenlanguage {

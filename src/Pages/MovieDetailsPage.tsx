@@ -5,7 +5,7 @@ import Spinner from '../components/Spinner';
 import MoviePosterImage from '../components/MoviePosterImage/MoviePosterImage';
 import MovieDetailsComponent from '../components/MovieDetailsComponent/MovieDetailsComponent';
 import { fetchMovieDetailsService } from '../Service/movieService';
-import { filterCast, filterDirectors, filterWriters, formatReleaseDate, formatRuntime, formatVoteAverage, getGenres } from '../utils/movieHelper';
+import { filterCast, filterDirectors, filterWriters, formatLanguages, formatReleaseDate, formatRuntime, formatVoteAverage, getGenres } from '../utils/movieHelper';
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const API_OPTIONS = {
@@ -45,6 +45,7 @@ const MovieDetailsPage = () => {
       movieDetailsObj.formattedRuntime = formatRuntime(movieDetailsObj.runtime);
       movieDetailsObj.formattedReleaseYear = formatReleaseDate(movieDetailsObj.release_date);
       movieDetailsObj.formatVoteAverage = formatVoteAverage(movieDetailsObj.vote_average);
+      movieDetailsObj.formatLanguages = formatLanguages(movieDetailsObj.spoken_languages);
       console.log('Movie Details:', movieDetailsObj);
       handleMovieDetailsResponse(movieDetailsObj, false, '')
     } catch (error) {

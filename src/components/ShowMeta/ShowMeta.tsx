@@ -9,7 +9,7 @@ const ShowMeta: React.FC<IShowMetaProps> = ({ movieDetails }) => {
 	return (
 		<div className="flex items-center text-sm text-gray-400 space-x-4 flex-wrap lead">
 			<div className="flex items-center m-0 text=[1rem]">
-				{typeof movieDetails.vote_average === 'number' && !isNaN(movieDetails.vote_average) ? (
+				{typeof movieDetails.vote_average === 'number' && !isNaN(movieDetails.vote_average) && movieDetails.vote_average !== 0 ? (
 					<>
 						{[...Array(maxStars)].map((_, i) => (
 							i < (movieDetails.formatVoteAverage ?? 0) ? (
@@ -23,16 +23,16 @@ const ShowMeta: React.FC<IShowMetaProps> = ({ movieDetails }) => {
 							)
 						))}
 						<span className="ml-2 text-white font-semibold">{movieDetails.formatVoteAverage} / 10</span>
+						<div className="border-l border-gray-600 h-4 mx-2"></div>
 					</>
 				) : null}
 			</div>
-			<div className="border-l border-gray-600 h-4 mx-2"></div>
 			{/* <span>TV-14</span> */}
 			<span className='m-0 text-[1rem]'>{movieDetails.formattedRuntime}</span>
 			<div className="border-l border-gray-600 h-4 mx-2"></div>
-			<span className='m-0 text-[1rem]'>{movieDetails.genreList}</span>
+			<span className='m-0 text-[1rem]'>{movieDetails.formatLanguages}</span>
 			<div className="border-l border-gray-600 h-4 mx-2"></div>
-			<span className='m-0 text-[1rem]'>({movieDetails.formattedReleaseYear})</span>
+			<span className='m-0 text-[1rem]'>{movieDetails.formattedReleaseYear}</span>
 		</div>
 	)
 }
