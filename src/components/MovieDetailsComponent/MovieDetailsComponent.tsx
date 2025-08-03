@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import ShowMeta from '../ShowMeta/ShowMeta';
 import MovieGenre from '../MovieGenre/MovieGenre';
+import Slider from '../Slider/Slider';
 
 interface IMovieDetailsComponentProps {
   movieDetails: IMovieDetailsResponse;
@@ -22,11 +23,11 @@ const MovieDetailsComponent: React.FC<IMovieDetailsComponentProps> = ({ movieDet
       <ShowMeta movieDetails={movieDetails} />
 
       {movieDetails.genreList?.length ? (
-        <ul className="genre-list flex flex-row gap-4 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+        <Slider>
           {movieDetails.genreList.map((genre, index) => (
             <><MovieGenre key={index} genre={genre} /></>
           ))}
-        </ul>
+        </Slider>
       ) : null}
 
       <p className="text-[1rerm] text-gray-300">

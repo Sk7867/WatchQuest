@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { environment } from '../../environment/environment';
 import { Link } from 'react-router-dom';
+import Slider from '../Slider/Slider';
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
@@ -59,7 +60,7 @@ const TrendingMovies = () => {
 
   return (
     <section className="trending h-[300px]">
-      <h2>Trending Movies</h2>
+      <h2 className='mb-10'>Trending Movies</h2>
       {isTrendingLoading ? (
         //Display skeleton component of 5 trending movies while loading
         <ul className='mt-20'>
@@ -73,7 +74,7 @@ const TrendingMovies = () => {
         </ul>
       ) :
         trendingErrorMessage ? (<p className='text-red-500'>{trendingErrorMessage}</p>) : (
-          <ul className='items-center mt-6'>
+          <Slider>
             {trendingMoviesList.map((movie, index) => (
               <li key={movie.id} className='h-[165px]'>
                 <Link to={`/movie/${movie.id}`} className='flex items-center h-[165px]'>
@@ -87,7 +88,7 @@ const TrendingMovies = () => {
                 </Link>
               </li>
             ))}
-          </ul>
+          </Slider>
         )
       }
 

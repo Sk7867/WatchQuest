@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { environment } from '../../environment/environment'
+import Slider from '../Slider/Slider'
 
 interface GenreListProps {
   selectedGenre: number | null
@@ -64,13 +65,13 @@ const GenreList: React.FC<GenreListProps> = ({ selectedGenre, handleGenreSelecte
         errorMessage ? (<p className="text-red-500">{errorMessage}</p>) :
           (
             <>
-              <ul className="genre-list flex flex-row gap-4 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+              <Slider>
                 {genreList.map((genre) => (
                   <li key={genre.id} onClick={() => handleGenreClick(genre.id)} className={`genre-item border-1  border-white cursor-pointer p-3 rounded-sm hover:bg-white hover:text-black transition-colors ${selectedGenre === genre.id ? 'bg-white text-black' : 'text-white'}`}>
                     <p className="genre-name text-nowrap">{genre.name}</p>
                   </li>
                 ))}
-              </ul>
+              </Slider>
             </>
           )}
     </section>
