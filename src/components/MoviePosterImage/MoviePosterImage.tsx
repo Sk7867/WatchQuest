@@ -7,11 +7,11 @@ interface IMoviePosterImageProps {
 
 const MoviePosterImage: React.FC<IMoviePosterImageProps> = ({ posterPath, altText }) => {
     return (
-        <div className="w-full md:w-1/3">
+        <div className="w-full lg:w-1/3 object-contain">
             <img
                 src={posterPath ? `https://image.tmdb.org/t/p/w500/${posterPath}` : '/no-movie.png'}
                 alt={altText || 'Movie Poster'}
-                className="object-cover w-full h-full"
+                className="object-contain w-full h-full"
             />
         </div>
     )

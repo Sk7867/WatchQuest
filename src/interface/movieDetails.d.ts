@@ -34,7 +34,12 @@ interface Cast {
 }
 
 interface IMovieCredits {
-  directors?: string[];
-  writers?: string[];
-  cast?: string[];
+  directors?: ICrewInfo[];
+  writers?: ICrewInfo[];
+  cast?: ICrewInfo[];
+}
+
+interface ICrewInfo {
+  name: string;
+  profile_path?: string | null;
 }

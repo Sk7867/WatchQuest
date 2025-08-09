@@ -97,7 +97,7 @@ const MovieDetailsPage = () => {
           <p className='text-red-500 text-2xl'>{errorMessage}</p>
         </div>
       ) : movieDetails && (
-        <div className="md:gap-6 text-white shadow-lg flex flex-col md:flex-row">
+        <div className="lg:gap-6 text-white shadow-lg flex flex-col lg:flex-row">
           {/* Poster */}
           <MoviePosterImage altText={movieDetails.title} posterPath={movieDetails.poster_path} />
           {/* Details */}

@@ -100,6 +100,7 @@ const useSearchMovies = (searchMovie: string, genreId: null | number) => {
 	const scrollToAllMoviesSection = () => {
 		setTimeout(() => {
 			const allMoviesSection = document.getElementById('allMovies');
+			console.log('All Movies Section:', allMoviesSection);
 			if (allMoviesSection) {
 				const headerHeight = 116;
 				const sectionTop = allMoviesSection.getBoundingClientRect().top + window.scrollY;

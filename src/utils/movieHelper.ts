@@ -1,20 +1,29 @@
-//Write a helper function to filter object with job "Director" and return an array of names using IMovieCreditsResponse as refecnce
+//Write a helper function to filter object with job "Director" and return an array of objects which contains name and profile_path using IMovieCreditsResponse as refecnce
 export const filterDirectors = (crew: Crew[]) => {
   return crew
     .filter((member) => member.job === "Director")
-    .map((director) => director.name);
+    .map((director) => ({
+      name: director.name,
+      profile_path: director.profile_path,
+    }));
 };
 
 //write a helper function to filter object with job "Writer" and return an array of names using IMovieCreditsResponse as reference
 export const filterWriters = (crew: Crew[]) => {
   return crew
     .filter((member) => member.job === "Writer")
-    .map((writer) => writer.name);
+    .map((writer) => ({
+      name: writer.name,
+      profile_path: writer.profile_path,
+    }));
 };
 
 //writer a helper function which returns an array of names from cast using IMovieCreditsResponse as reference
 export const filterCast = (cast: Cast[]) => {
-  return cast.map((member) => member.name);
+  return cast.map((member) => ({
+    name: member.name,
+    profile_path: member.profile_path,
+  }));
 };
 
 //writer a hepler function that returns an array of genres from IMovieDetailsResponse
