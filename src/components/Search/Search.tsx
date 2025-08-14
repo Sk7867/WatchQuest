@@ -46,7 +46,7 @@ const Search: React.FC<searchProps> = ({ handleMovieSearch }) => {
 
 
   return (
-    <div className="search max-w-[200px] md:max-w-[500px] xl:max-w-3xl">
+    <div className="search max-w-[200px] md:max-w-[500px] xl:max-w-3xl m-0" id='search_bar'>
       <div className='search_container position-relative'>
         <img src="./search.svg" alt="Search" />
 

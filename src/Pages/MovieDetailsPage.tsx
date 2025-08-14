@@ -34,9 +34,20 @@ const MovieDetailsPage = () => {
     return () => {
       // Any cleanup logic if needed
     };
-
-
   }, [id]);
+
+  useEffect(() => {
+    const searchBarComp = document.getElementById('search_bar')
+    if (searchBarComp) {
+      searchBarComp.style.display = 'none'
+    }
+    return () => {
+      if (searchBarComp) {
+        searchBarComp.style.display = 'block'
+      }
+    }
+  }, [])
+
 
   const fetchMovieDetails = async (movieId: string) => {
     try {
