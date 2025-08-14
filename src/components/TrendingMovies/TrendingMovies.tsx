@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { environment } from '../../environment/environment';
 import { Link } from 'react-router-dom';
 import Slider from '../Slider/Slider';
