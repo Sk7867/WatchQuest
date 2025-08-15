@@ -15,7 +15,11 @@ const App = () => {
 
 
   const handleGenreSelected = (genreId: number) => {
-    setSelectedGenre(genreId)
+    if (selectedGenre === genreId) {
+      setSelectedGenre(null);
+    } else {
+      setSelectedGenre(genreId)
+    }
   }
 
   const handleMovieSearch = (name: string) => {

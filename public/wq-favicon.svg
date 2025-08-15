@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" role="img" aria-label="WQ Favicon">
+  <title>WQ</title>
+  <rect width="32" height="32" fill="#000" rx="6" />
+  <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle"
+        font-family="Inter, Segoe UI, Roboto, Helvetica, Arial, system-ui, -apple-system, sans-serif"
+        font-weight="800" font-size="16" fill="#fff" letter-spacing="0.5">
+    WQ
+  </text>
+</svg>

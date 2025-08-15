@@ -46,14 +46,15 @@ const Search: React.FC<searchProps> = ({ handleMovieSearch }) => {
 
 
   return (
-    <div className="search max-w-[200px] md:max-w-[500px] xl:max-w-3xl m-0" id='search_bar'>
-      <div className='search_container position-relative'>
+    <div className="search max-w-[200px] md:max-w-[500px] xl:max-w-3xl m-0 h-min" id='search_bar'>
+      <div className='search_container  position-relative'>
         <img src="./search.svg" alt="Search" />
 
         <input type="text"
           placeholder={searchPlaceholder}
           value={searchTerm}
           onChange={(e) => handleSearchterm(e.target.value)}
+          className=''
         />
         {searchTerm && (
           <span className='position-absolute text-white size-7 flex items-center justify-center white w-[24px] h-[24px]' style={{ right: '10px', top: '50%', cursor: 'pointer' }} onClick={handleClearSearch}>

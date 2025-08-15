@@ -1,17 +1,7 @@
 import { useEffect, useState } from 'react'
-import { environment } from '../../environment/environment';
 import { Link } from 'react-router-dom';
 import Slider from '../Slider/Slider';
-
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-
-const API_OPTIONS = {
-  method: "GET",
-  headers: {
-    accept: "application/json",
-    Authorization: `Bearer ${API_KEY}`,
-  },
-};
+import { fetchTrendingMoviesService } from '../../Service/movieService';
 
 const TrendingMovies = () => {
 
@@ -20,31 +10,20 @@ const TrendingMovies = () => {
   const [isTrendingLoading, setIsTrendingLoading] = useState(false)
   const [trendingErrorMessage, setTrendingErrorMessage] = useState('')
 
-
-
-
-
   useEffect(() => {
+    handleTrendingResponse([], true, '')
     fetchTrendingMovies()
     return () => { }
   }, [])
 
 
   const fetchTrendingMovies = async (time_period: string = 'day') => {
-    setIsTrendingLoading(true);
-    setTrendingErrorMessage('')
-    setTrendingMoviesList([])
     try {
-      const trendingMoviesUrl = `${environment.tmdbBaseUrl}${environment.trending}${time_period}?language=en-US`;
-      const response = await fetch(trendingMoviesUrl, API_OPTIONS);
-      if (!response.ok) {
-        handleTrendingResponse([], false, 'Failed to fetch Movies')
-      }
-      const data: MovieResponse = await response.json()
-      if (data.results.length) {
-        handleTrendingResponse(data.results, false)
+      const trendingMoviesObj = await fetchTrendingMoviesService(time_period);
+      if (trendingMoviesObj.results.length) {
+        handleTrendingResponse(trendingMoviesObj.results, false)
       } else {
-        handleTrendingResponse([], false, 'Movie Not Found, Please check the name')
+        handleTrendingResponse([], false, 'No Trending Movies Found')
       }
     } catch (error) {
       handleTrendingResponse([], false, 'Error fetching Movies. Please try again later.');
@@ -76,14 +55,15 @@ const TrendingMovies = () => {
         trendingErrorMessage ? (<p className='text-red-500'>{trendingErrorMessage}</p>) : (
           <Slider>
             {trendingMoviesList.map((movie, index) => (
-              <li key={movie.id} className='h-[165px]'>
-                <Link to={`/movie/${movie.id}`} className='flex items-center h-[165px]'>
+              <li key={movie.id} className='h-[200px]'>
+                <Link to={`/movie/${movie.id}`} className='flex items-center h-[200px]'>
                   <p>{index + 1}</p>
                   <img
                     src={movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : '/no-movie.png'}
                     alt={movie.title}
                     loading="eager"
                     fetchPriority="high"
+                    className='w-full h-full object-cover rounded-lg'
                   />
                 </Link>
               </li>

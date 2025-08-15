@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { environment } from '../../environment/environment'
 import Slider from '../Slider/Slider'
+import { fetchGenresService } from '../../Service/movieService'
 
 interface GenreListProps {
   selectedGenre: number | null
@@ -13,29 +13,21 @@ const GenreList: React.FC<GenreListProps> = ({ selectedGenre, handleGenreSelecte
   const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
+    handleGenreResponse([], true, '')
     fetchGenres();
     return () => { }
   }, [])
 
   const fetchGenres = async () => {
-    const fetchGenreUrl = `${environment.tmdbBaseUrl}${environment.listGenre}`;
-    const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-    const API_OPTIONS = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${API_KEY}`,
-      },
-    };
-    const response = await fetch(fetchGenreUrl, API_OPTIONS);
-    if (!response.ok) {
-      handleGenreResponse([], false, 'Failed to fetch Genres');
-      return;
-    }
-    const data: { genres: genre[] } = await response.json();
-    if (data.genres.length) {
-      handleGenreResponse(data.genres, false);
-    } else {
+    try {
+      const genreListArray = await fetchGenresService();
+      if (genreListArray.genres.length) {
+        handleGenreResponse(genreListArray.genres, false);
+      } else {
+        handleGenreResponse([], false, 'No Genres Found');
+      }
+    } catch (error) {
+      console.error('Fetch Movie Credits Error ::', error);
       handleGenreResponse([], false, 'No Genres Found');
     }
   };
@@ -51,13 +43,13 @@ const GenreList: React.FC<GenreListProps> = ({ selectedGenre, handleGenreSelecte
   }
 
   return (
-    <section className='genre-list-section my-20'>
+    <section className='genre-list-section mb-5' id='genreList'>
       <h2 className="text-white text-2xl mb-4">Genres</h2>
       {isLoading ? (
         <ul className='genre-list flex flex-row gap-4 overflow-y-auto' style={{ scrollbarWidth: 'none' }}>
           {Array.from({ length: 12 }).map((_, index) => (
             <li key={index} className='w-24 h-12 border-1 p-3 border-white rounded-sm'>
-              <div className='w-full h-full bg-gray-700 animate-pulse'></div>
+              <div className='w-14 h-full bg-gray-700 animate-pulse md:w-full'></div>
             </li>
           ))}
         </ul>

@@ -1,20 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
-import { environment } from '../environment/environment';
 import Spinner from '../components/Spinner';
 import MoviePosterImage from '../components/MoviePosterImage/MoviePosterImage';
 import MovieDetailsComponent from '../components/MovieDetailsComponent/MovieDetailsComponent';
-import { fetchMovieDetailsService } from '../Service/movieService';
+import { fetchMovieCreditsService, fetchMovieDetailsService } from '../Service/movieService';
 import { filterCast, filterDirectors, filterWriters, formatLanguages, formatReleaseDate, formatRuntime, formatVoteAverage, getGenres } from '../utils/movieHelper';
-
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-const API_OPTIONS = {
-  method: "GET",
-  headers: {
-    accept: "application/json",
-    Authorization: `Bearer ${API_KEY}`,
-  },
-};
 
 const MovieDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,7 +18,6 @@ const MovieDetailsPage = () => {
     if (id) {
       handleMovieDetailsResponse(null, true, '')
       fetchMovieDetails(id);
-      fetchMovieCredits(id);
     }
     // Cleanup if necessary
     return () => {
@@ -52,12 +41,14 @@ const MovieDetailsPage = () => {
   const fetchMovieDetails = async (movieId: string) => {
     try {
       const movieDetailsObj = await fetchMovieDetailsService(movieId);
+      document.title = 'WQ | ' + movieDetailsObj.title;
       movieDetailsObj.genreList = getGenres(movieDetailsObj.genres);
       movieDetailsObj.formattedRuntime = formatRuntime(movieDetailsObj.runtime);
       movieDetailsObj.formattedReleaseYear = formatReleaseDate(movieDetailsObj.release_date);
       movieDetailsObj.formatVoteAverage = formatVoteAverage(movieDetailsObj.vote_average);
       movieDetailsObj.formatLanguages = formatLanguages(movieDetailsObj.spoken_languages);
       console.log('Movie Details:', movieDetailsObj);
+      fetchMovieCredits(movieId);
       handleMovieDetailsResponse(movieDetailsObj, false, '')
     } catch (error) {
       console.error('Fetch Movie Details Error ::', error)
@@ -67,20 +58,25 @@ const MovieDetailsPage = () => {
 
   const fetchMovieCredits = async (movieId: string) => {
     try {
-      const getCreditsUrl = environment.tmdbBaseUrl + environment.movieDetails + movieId + "/credits";
-      const creditsResponse = await fetch(getCreditsUrl, API_OPTIONS);
-      if (!creditsResponse.ok) {
-        console.error('Failed to fetch movie credits');
-        return;
-      }
-      const creditsData: IMovieCreditsResponse = await creditsResponse.json();
-      const directors = filterDirectors(creditsData.crew);
-      const writers = filterWriters(creditsData.crew);
-      const cast = filterCast(creditsData.cast);
+      // const getCreditsUrl = environment.tmdbBaseUrl + environment.movieDetails + movieId + "/credits";
+      // const creditsResponse = await fetch(getCreditsUrl, API_OPTIONS);
+      // if (!creditsResponse.ok) {
+      //   console.error('Failed to fetch movie credits');
+      //   return;
+      // }
+      // const creditsData: IMovieCreditsResponse = await creditsResponse.json();
+      // const directors = filterDirectors(creditsData.crew);
+      // const writers = filterWriters(creditsData.crew);
+      // const cast = filterCast(creditsData.cast);
 
+      // setMovieCredits({ directors, writers, cast });
+      // // Process credits data if needed
+      // console.log('Movie directros:', directors);
+      const movieCredits = await fetchMovieCreditsService(movieId);
+      const directors = filterDirectors(movieCredits.crew);
+      const writers = filterWriters(movieCredits.crew);
+      const cast = filterCast(movieCredits.cast);
       setMovieCredits({ directors, writers, cast });
-      // Process credits data if needed
-      console.log('Movie directros:', directors);
     } catch (error) {
       console.error('Fetch Movie Credits Error ::', error);
     }
