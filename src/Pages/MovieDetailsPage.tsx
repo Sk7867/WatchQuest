@@ -37,7 +37,6 @@ const MovieDetailsPage = () => {
     }
   }, [])
 
-
   const fetchMovieDetails = async (movieId: string) => {
     try {
       const movieDetailsObj = await fetchMovieDetailsService(movieId);
@@ -96,22 +95,24 @@ const MovieDetailsPage = () => {
   // const getRuntime = (runtime?: number) => runtime ? `${Math.floor(runtime / 60)}h ${runtime % 60}min` : '';
 
   return (
-    <div className="flex flex-col md:flex-row mt-8 gap-8 text-white">
-      {isLoading ? (
-        <div className="w-full flex justify-center items-center min-h-[400px]"><Spinner /></div>
-      ) : errorMessage ? (
-        <div className="w-full flex justify-center items-center min-h-[400px]">
-          <p className='text-red-500 text-2xl'>{errorMessage}</p>
-        </div>
-      ) : movieDetails && (
-        <div className="lg:gap-6 text-white shadow-lg flex flex-col lg:flex-row">
-          {/* Poster */}
-          <MoviePosterImage altText={movieDetails.title} posterPath={movieDetails.poster_path} />
-          {/* Details */}
-          <MovieDetailsComponent movieDetails={movieDetails} movieCredits={movieCredits} />
-        </div>
-      )}
-    </div>
+    <>
+      <div className="flex flex-col md:flex-row mt-8 gap-8 text-white">
+        {isLoading ? (
+          <div className="w-full flex justify-center items-center min-h-[400px]"><Spinner /></div>
+        ) : errorMessage ? (
+          <div className="w-full flex justify-center items-center min-h-[400px]">
+            <p className='text-red-500 text-2xl'>{errorMessage}</p>
+          </div>
+        ) : movieDetails && (
+          <div className="lg:gap-6 text-white shadow-lg flex flex-col lg:flex-row">
+            {/* Poster */}
+            <MoviePosterImage altText={movieDetails.title} posterPath={movieDetails.poster_path} />
+            {/* Details */}
+            <MovieDetailsComponent movieDetails={movieDetails} movieCredits={movieCredits} />
+          </div>
+        )}
+      </div>
+    </>
   )
 }
 
